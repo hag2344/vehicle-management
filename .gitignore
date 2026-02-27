@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 HELP.md
 .gradle
 build/
@@ -53,3 +54,29 @@ src/main/resources/application-prod.yml
 
 # test 결과
 /build/reports/tests/
+=======
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+replay_pid*
+>>>>>>> 03faae2c741926e928fabfb0edc34a0e4d25f3bd
