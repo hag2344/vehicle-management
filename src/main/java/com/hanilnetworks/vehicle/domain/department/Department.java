@@ -1,6 +1,6 @@
 package com.hanilnetworks.vehicle.domain.department;
 
-import com.hanilnetworks.vehicle.domain.common.BaseTimeEntity;
+import com.hanilnetworks.vehicle.domain.shared.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

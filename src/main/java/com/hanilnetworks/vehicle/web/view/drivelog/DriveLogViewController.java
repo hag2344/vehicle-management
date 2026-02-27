@@ -1,4 +1,4 @@
-package com.hanilnetworks.vehicle.web.view;
+package com.hanilnetworks.vehicle.web.view.drivelog;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

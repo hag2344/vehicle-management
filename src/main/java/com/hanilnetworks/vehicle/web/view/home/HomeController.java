@@ -1,4 +1,4 @@
-package com.hanilnetworks.vehicle.web.home;
+package com.hanilnetworks.vehicle.web.view.home;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

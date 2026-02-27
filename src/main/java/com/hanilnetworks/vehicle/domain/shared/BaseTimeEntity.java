@@ -1,4 +1,4 @@
-package com.hanilnetworks.vehicle.domain.common;
+package com.hanilnetworks.vehicle.domain.shared;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

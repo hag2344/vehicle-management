@@ -1,6 +1,5 @@
-package com.hanilnetworks.vehicle.domain.drivelog.dto.request;
+package com.hanilnetworks.vehicle.web.api.drivelog.dto.request;
 
-import com.hanilnetworks.vehicle.domain.drivelog.DriveLog;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -32,18 +31,4 @@ public class DriveLogCreateRequest {
     private Integer businessDistance;
 
     private String remarks;
-
-    public DriveLog toEntity(Integer totalDistance) {
-        return DriveLog.builder()
-                .driveDate(driveDate)
-                .departmentId(departmentId)
-                .driverName(driverName)
-                .startMileage(startMileage)
-                .endMileage(endMileage)
-                .totalDistance(totalDistance)
-                .commuteDistance(commuteDistance)
-                .businessDistance(businessDistance)
-                .remarks(remarks)
-                .build();
-    }
 }
