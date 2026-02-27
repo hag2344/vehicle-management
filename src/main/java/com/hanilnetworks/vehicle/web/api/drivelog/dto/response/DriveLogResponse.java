@@ -1,4 +1,4 @@
-package com.hanilnetworks.vehicle.domain.drivelog.dto.response;
+package com.hanilnetworks.vehicle.web.api.drivelog.dto.response;
 
 import com.hanilnetworks.vehicle.domain.drivelog.DriveLog;
 import lombok.Getter;

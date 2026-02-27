@@ -3,20 +3,16 @@ spring:
     name: vehicle-management
   profiles:
     default: local
-  
+
   jpa:
     hibernate:
       ddl-auto: validate
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
         dialect: org.hibernate.dialect.MariaDBDialect
-  
+        format_sql: false
+
   flyway:
     enabled: true
     baseline-on-migrate: false
-
-
-    
-

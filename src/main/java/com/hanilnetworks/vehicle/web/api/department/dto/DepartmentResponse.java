@@ -1,4 +1,4 @@
-package com.hanilnetworks.vehicle.domain.department.dto;
+package com.hanilnetworks.vehicle.web.api.department.dto;
 
 import com.hanilnetworks.vehicle.domain.department.Department;
 import lombok.Getter;

@@ -29,11 +29,18 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.flywaydb:flyway-core'
-	implementation 'org.flywaydb:flyway-mysql'
-	compileOnly 'org.projectlombok:lombok'
+
+	// DB 버전 관리
+	implementation 'org.flywaydb:flyway-core:10.22.0'
+	// 경우에 따라 필요 (MySQL/MariaDB 계열)
+	implementation 'org.flywaydb:flyway-mysql:10.22.0'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
