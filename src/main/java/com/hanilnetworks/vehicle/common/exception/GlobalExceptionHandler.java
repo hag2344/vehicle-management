@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "com.hanilnetworks.vehicle.web.api")
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
