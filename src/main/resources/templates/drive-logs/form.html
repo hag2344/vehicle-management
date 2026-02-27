@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/base}">
+
+<head>
+    <title>새 기록 작성</title>
+</head>
+<div layout:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">새 운행 기록 작성</h4>
+                </div>
+                <div class="card-body">
+                    <form id="driveLogForm">
+                        <div class="mb-3">
+                            <label class="form-label text-danger fw-bold">사용일자 *</label>
+                            <input type="date" class="form-control" id="driveDate" name="driveDate" required>
+                            <div class="form-text text-muted">※ 시스템에 저장된 마지막 사용일자 이후로만 선택 가능합니다.</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">부서</label>
+                                <select class="form-select" id="departmentId" name="departmentId">
+                                    <option value="">선택</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-danger fw-bold">성명 *</label>
+                                <input type="text" class="form-control" id="driverName" name="driverName" required>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label text-danger fw-bold">주행 전 계기판 거리(km) *</label>
+                                <input type="number" class="form-control" id="startMileage" name="startMileage"
+                                    required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label text-danger fw-bold">주행 후 계기판 거리(km) *</label>
+                                <input type="number" class="form-control" id="endMileage" name="endMileage" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">총 주행거리(km) <small>(자동 계산)</small></label>
+                                <input type="text" class="form-control" id="totalDistance" readonly value="0">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">출·퇴근용 거리(km)</label>
+                                <input type="number" class="form-control" id="commuteDistance" name="commuteDistance"
+                                    value="0" min="0">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">일반 업무용 거리(km)</label>
+                                <input type="number" class="form-control" id="businessDistance" name="businessDistance"
+                                    value="0" min="0">
+                            </div>
+                            <div class="col-12 mt-1 text-danger small" id="distanceWarning" style="display: none;">
+                                출·퇴근용(km)과 일반 업무용(km)의 합이 총 주행거리를 초과할 수 없습니다.
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">비고 (방문지 및 특이사항)</label>
+                            <input type="text" class="form-control" id="remarks" name="remarks" maxlength="255">
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="/drive-logs" class="btn btn-outline-secondary">취소 및 목록</a>
+                            <button type="submit" class="btn btn-primary" id="submitBtn">저장하기</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            await loadDepartments();
+            await loadLatestMileage();
+
+            const startInput = document.getElementById('startMileage');
+            const endInput = document.getElementById('endMileage');
+            const commuteInput = document.getElementById('commuteDistance');
+            const businessInput = document.getElementById('businessDistance');
+
+            [startInput, endInput, commuteInput, businessInput].forEach(el => {
+                el.addEventListener('input', calculateDistance);
+            });
+
+            document.getElementById('driveLogForm').addEventListener('submit', submitForm);
+        });
+
+        async function loadDepartments() {
+            try {
+                const res = await fetch('/api/v1/departments');
+                const json = await res.json();
+                const data = json.data;
+                const select = document.getElementById('departmentId');
+                data.forEach(dep => {
+                    const opt = document.createElement('option');
+                    opt.value = dep.id;
+                    opt.textContent = dep.name;
+                    select.appendChild(opt);
+                });
+            } catch (e) {
+                console.error("Failed to load departments", e);
+            }
+        }
+
+        async function loadLatestMileage() {
+            try {
+                const res = await fetch('/api/v1/drive-logs/latest-mileage');
+                const json = await res.json();
+                const data = json.data;
+
+                // Set start mileage
+                document.getElementById('startMileage').value = data.lastMileage || 0;
+
+                // Set date restriction
+                const dateInput = document.getElementById('driveDate');
+                if (data.lastDriveDate) {
+                    dateInput.min = data.lastDriveDate;
+                    dateInput.value = data.lastDriveDate; // preset to min date
+                } else {
+                    dateInput.value = new Date().toISOString().split('T')[0];
+                }
+            } catch (e) {
+                console.error("Failed to load latest mileage", e);
+            }
+        }
+
+        function calculateDistance() {
+            const start = parseInt(document.getElementById('startMileage').value) || 0;
+            const end = parseInt(document.getElementById('endMileage').value) || 0;
+            const commute = parseInt(document.getElementById('commuteDistance').value) || 0;
+            const business = parseInt(document.getElementById('businessDistance').value) || 0;
+
+            const total = Math.max(0, end - start);
+            document.getElementById('totalDistance').value = total;
+
+            const warning = document.getElementById('distanceWarning');
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (commute + business > total) {
+                warning.style.display = 'block';
+                submitBtn.disabled = true;
+            } else {
+                warning.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        }
+
+        async function submitForm(e) {
+            e.preventDefault();
+
+            const payload = {
+                driveDate: document.getElementById('driveDate').value,
+                departmentId: document.getElementById('departmentId').value ? parseInt(document.getElementById('departmentId').value) : null,
+                driverName: document.getElementById('driverName').value,
+                startMileage: parseInt(document.getElementById('startMileage').value),
+                endMileage: parseInt(document.getElementById('endMileage').value),
+                commuteDistance: parseInt(document.getElementById('commuteDistance').value) || 0,
+                businessDistance: parseInt(document.getElementById('businessDistance').value) || 0,
+                remarks: document.getElementById('remarks').value
+            };
+
+            try {
+                const res = await fetch('/api/v1/drive-logs', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    alert('저장되었습니다.');
+                    window.location.href = '/drive-logs';
+                } else {
+                    const errorData = await res.json();
+                    alert('오류: ' + (errorData.message || '저장 중 문제가 발생했습니다.'));
+                }
+            } catch (e) {
+                alert('네트워크 오류가 발생했습니다.');
+                console.error(e);
+            }
+        }
+    </script>
+</th:block>
+
+</html>
