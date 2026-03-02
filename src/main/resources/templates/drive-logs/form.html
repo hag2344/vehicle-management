@@ -7,11 +7,8 @@
     <title>새 기록 작성</title>
 </head>
 
-<body>
-<div layout:fragment="content">
-    <!-- ✅ 페이지 가드용 root (form 전용) -->
-    <div id="driveLogFormPage"></div>
 
+<th:block layout:fragment="content">
     <div class="page-title print-hide">
         <div>
             <h2>새 운행 기록 작성</h2>
@@ -104,10 +101,10 @@
         </div>
     </div>
 
-</div>
+</th:block>
 
 <th:block layout:fragment="script">
-    <script src="/js/pages/drive-log-form.js"></script>
+    <script type="module" src="/js/pages/drive-log-form.js"></script>
 </th:block>
-</body>
+
 </html>
