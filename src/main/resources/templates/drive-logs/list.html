@@ -7,11 +7,7 @@
     <title>운행 기록 목록</title>
 </head>
 
-<body>
-<div layout:fragment="content">
-    <!-- 페이지 가드용 root -->
-    <div id="driveLogListPage"></div>
-
+<th:block layout:fragment="content">
     <div class="page-title print-hide">
         <div>
             <h2>차량 운행 기록</h2>
@@ -118,7 +114,7 @@
 </div>
 
 <th:block layout:fragment="script">
-    <script src="/js/pages/drive-log-list.js"></script>
+    <script type="module" src="/js/pages/drive-log-list.js"></script>
 </th:block>
-</body>
+</th:block>
 </html>
