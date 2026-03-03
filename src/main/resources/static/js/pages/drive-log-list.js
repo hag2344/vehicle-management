@@ -128,7 +128,10 @@ async function loadLogs(page, dom) {
     const pageData = res?.data;
 
     renderTable(pageData?.content || [], dom.logTableBody);
-    renderPagination(pageData, dom.pagination, () => collectDom());
+    renderPagination(pageData, dom.pagination, {
+      currentPage: pageData.page,
+      onChange: (nextPage) => loadLogs(nextPage, dom)
+    });
 
     dom.kpiCount.textContent = `${(pageData?.content || []).length}건`;
   } catch (e) {

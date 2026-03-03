@@ -23,7 +23,7 @@ public class DriveLogService {
     private final DepartmentRepository departmentRepository;
 
     public LatestMileageInfo getLatestMileage() {
-        return driveLogRepository.findFirstByOrderByDriveDateDescCreatedAtDesc()
+        return driveLogRepository.findFirstByOrderByDriveDateDescCreatedAtDescStartMileageDesc()
                 .map(log -> new LatestMileageInfo(log.getEndMileage(), log.getDriveDate()))
                 .orElseGet(() -> new LatestMileageInfo(0, null));
     }
@@ -35,7 +35,7 @@ public class DriveLogService {
 
     @Transactional
     public Long createDriveLog(DriveLogCreateCommand cmd) {
-        Optional<DriveLog> latestLogOpt = driveLogRepository.findFirstByOrderByDriveDateDescCreatedAtDesc();
+        Optional<DriveLog> latestLogOpt = driveLogRepository.findFirstByOrderByDriveDateDescCreatedAtDescStartMileageDesc();
 
         validateDepartment(cmd.getDepartmentId());
         validateMileage(cmd, latestLogOpt);
