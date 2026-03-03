@@ -100,7 +100,13 @@ async function loadLatestMileage(dom) {
   const res = await Http.get("/api/v1/drive-logs/latest-mileage");
   const data = res?.data || { lastMileage: 0, lastDriveDate: null };
 
-  dom.startMileage.value = data.lastMileage ?? 0;
+  if (dom.startMileage){
+    dom.startMileage.value = data.lastMileage
+    dom.startMileage.readOnly = true;
+  }else{
+    dom.startMileage.value = 0;
+    dom.startMileage.readOnly = false;
+  }
 
   if (data.lastDriveDate) {
     dom.driveDate.min = data.lastDriveDate;
@@ -122,8 +128,9 @@ function calculateDistance(dom) {
   const commuteSafe = Number.isFinite(commute) ? commute : 0;
   const businessSafe = Number.isFinite(business) ? business : 0;
 
-  const invalid = (commuteSafe + businessSafe) > total;
+  const invalid = (commuteSafe + businessSafe) !== total;
   dom.distanceWarning.style.display = invalid ? "block" : "none";
+  dom.distanceWarning.textContent = invalid ? "출·퇴근용(km)과 일반 업무용(km)의 합이 총 주행거리와 같아야 합니다." : "none";
   dom.submitBtn.disabled = invalid;
 }
 
@@ -137,16 +144,20 @@ async function submitForm(e, dom) {
     driverName: dom.driverName.value?.trim(),
     startMileage: toInt(dom.startMileage.value),
     endMileage: toInt(dom.endMileage.value),
-    commuteDistance: toInt(dom.commuteDistance.value) || 0,
-    businessDistance: toInt(dom.businessDistance.value) || 0,
-    remarks: dom.remarks?.value?.trim() || null,
+    commuteDistance: toInt(dom.commuteDistance.value),
+    businessDistance: toInt(dom.businessDistance.value),
+    remarks: dom.remarks?.value?.trim(),
   };
 
   const missing = [];
   if (!payload.driveDate) missing.push("사용일자");
+  if (!payload.departmentId) missing.push("부서");
   if (!payload.driverName) missing.push("성명");
   if (!Number.isFinite(payload.startMileage)) missing.push("주행 전 거리");
   if (!Number.isFinite(payload.endMileage)) missing.push("주행 후 거리");
+  if (!Number.isFinite(payload.commuteDistance)) missing.push("출·퇴근용 거리");
+  if (!Number.isFinite(payload.businessDistance)) missing.push("일반 업무용 거리");
+  if (!payload.remarks) missing.push("비고");
 
   if (missing.length) {
     UI.showToast("warning", "입력 확인", `${missing.join(", ")} 항목을 확인해주세요.`);

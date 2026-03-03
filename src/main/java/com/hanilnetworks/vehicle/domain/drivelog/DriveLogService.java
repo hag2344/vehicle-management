@@ -90,7 +90,7 @@ public class DriveLogService {
         int commute = cmd.getCommuteDistance() != null ? cmd.getCommuteDistance() : 0;
         int business = cmd.getBusinessDistance() != null ? cmd.getBusinessDistance() : 0;
 
-        if (commute + business > totalDistance) {
+        if (commute + business != totalDistance) {
             throw new BusinessException(ErrorCode.INVALID_TOTAL_DISTANCE);
         }
     }

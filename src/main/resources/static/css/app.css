@@ -213,4 +213,34 @@ a:hover { text-decoration: underline; }
     .v-card, .table-wrap { box-shadow: none; border-radius: 0; }
     .table thead th { background: #fff !important; }
     table, th, td { border-color: #000 !important; }
+
+    /* ✅ 여기부터 추가 */
+    /* 1) 스크롤(가로 overflow) 제거: table-responsive / table-wrap 같은 래퍼가 범인 */
+    .table-responsive,
+    .table-wrap,
+    .table-responsive * {
+        overflow: visible !important;
+    }
+
+    /* 2) 화면 폭(종이 폭)에 맞추기 */
+    table {
+        width: 100% !important;
+        max-width: 100% !important;
+        table-layout: fixed;  /* 칼럼 폭을 종이에 맞게 고정 */
+    }
+
+    /* 3) 칸 안에서 줄바꿈 허용해서 스크롤 대신 아래로 내려가게 */
+    th, td {
+        white-space: normal !important;
+        word-break: break-word !important;
+        overflow-wrap: anywhere !important;
+        padding: 4px 6px !important;
+        font-size: 11px; /* 필요하면 10~12px로 조절 */
+    }
+
+    /* 4) (선택) 인쇄 페이지 설정: 크롬/엣지에서 잘 먹힘 */
+    @page {
+        size: A4 landscape;
+        margin: 10mm;
+    }
 }
