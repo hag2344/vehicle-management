@@ -100,12 +100,14 @@ async function loadLatestMileage(dom) {
   const res = await Http.get("/api/v1/drive-logs/latest-mileage");
   const data = res?.data || { lastMileage: 0, lastDriveDate: null };
 
-  if (dom.startMileage){
-    dom.startMileage.value = data.lastMileage
-    dom.startMileage.readOnly = true;
-  }else{
-    dom.startMileage.value = 0;
-    dom.startMileage.readOnly = false;
+  if (dom.startMileage) {
+    if (data.lastMileage !== 0) {
+      dom.startMileage.value = data.lastMileage
+      dom.startMileage.readOnly = true;
+    } else {
+      dom.startMileage.value = 0;
+      dom.startMileage.readOnly = false;
+    }
   }
 
   if (data.lastDriveDate) {

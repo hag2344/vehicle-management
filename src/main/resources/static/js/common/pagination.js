@@ -1,4 +1,11 @@
-export function renderPagination(pageData, ul, getDom) {
+// /js/common/pagination.js
+
+export function renderPagination(pageData, ul, options = {}) {
+    const {
+        currentPage = 0,
+        onChange = () => {}
+    } = options;
+
     ul.innerHTML = "";
     if (!pageData || pageData.totalPages <= 1) return;
 
@@ -14,10 +21,12 @@ export function renderPagination(pageData, ul, getDom) {
         const li = document.createElement("li");
         li.className = `page-item ${disabled ? "disabled" : ""}`;
         li.innerHTML = `<a class="page-link" href="#">${label}</a>`;
+
         li.querySelector("a").addEventListener("click", (e) => {
             e.preventDefault();
-            if (!disabled) loadLogs(page, getDom());
+            if (!disabled) onChange(page);
         });
+
         return li;
     }
 
@@ -25,10 +34,12 @@ export function renderPagination(pageData, ul, getDom) {
         const li = document.createElement("li");
         li.className = `page-item ${active ? "active" : ""}`;
         li.innerHTML = `<a class="page-link" href="#">${page + 1}</a>`;
+
         li.querySelector("a").addEventListener("click", (e) => {
             e.preventDefault();
-            loadLogs(page, getDom());
+            onChange(page);
         });
+
         return li;
     }
 }
