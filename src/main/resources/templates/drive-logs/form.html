@@ -37,8 +37,8 @@
 
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label class="form-label">부서</label>
-                        <select class="form-select" id="departmentId" name="departmentId">
+                        <label class="form-label required">부서</label>
+                        <select class="form-select" id="departmentId" name="departmentId" required>
                             <option value="">선택</option>
                         </select>
                         <div class="field-error" data-field-error="departmentId"></div>
@@ -72,25 +72,25 @@
 
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label class="form-label">출·퇴근용 거리(km)</label>
-                        <input type="number" class="form-control" id="commuteDistance" name="commuteDistance" value="0" min="0">
+                        <label class="form-label required">출·퇴근용 거리(km)</label>
+                        <input type="number" class="form-control" id="commuteDistance" name="commuteDistance" value="0" required min="0">
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label">일반 업무용 거리(km)</label>
-                        <input type="number" class="form-control" id="businessDistance" name="businessDistance" value="0" min="0">
+                        <label class="form-label required">일반 업무용 거리(km)</label>
+                        <input type="number" class="form-control" id="businessDistance" name="businessDistance" value="0" required min="0">
                     </div>
 
                     <div class="col-12 mt-2">
                         <div class="field-error" id="distanceWarning" style="display:none;">
-                            출·퇴근용(km)과 일반 업무용(km)의 합이 총 주행거리를 초과할 수 없습니다.
+                            출·퇴근용(km)과 일반 업무용(km)의 합이 총 주행거리와 같아야 합니다.
                         </div>
                     </div>
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label">비고 (방문지 및 특이사항)</label>
-                    <input type="text" class="form-control" id="remarks" name="remarks" maxlength="255" placeholder="예) 고객사 방문 / 정비소">
+                    <label class="form-label required">비고 (방문지 및 특이사항)</label>
+                    <input type="text" class="form-control" id="remarks" name="remarks" maxlength="255" required placeholder="예) 고객사 방문 / 정비소">
                 </div>
 
                 <div class="d-flex justify-content-between">
